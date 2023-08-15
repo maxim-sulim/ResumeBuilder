@@ -14,10 +14,13 @@ class SkillCollectionCell: UICollectionViewCell {
     @IBOutlet weak var titleSkillLable: UILabel!
     
     
-    func configure() {
+    func configure(user: Resume, index: Int) {
+        
         backSkillView.layer.backgroundColor = Resources.Color.bacgroundTop.cgColor
         backSkillView.layer.cornerRadius = 12
         titleSkillLable.textColor = Resources.Color.text
+        titleSkillLable.text = user.skills[index]
+        
     }
     
 }

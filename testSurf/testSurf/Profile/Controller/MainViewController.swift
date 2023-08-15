@@ -39,6 +39,11 @@ class MainViewController: UIViewController, UserDataProtocol {
     }
     
     
+    override func loadView() {
+        super.loadView()
+        loadUserData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -67,10 +72,35 @@ extension MainViewController {
     }
     
    private func updateHeightSkillsRow() {
-      let countSkillsOneRow = user.skills.count / 2
-      let heightSkill = CGFloat(45)
-      let resultHeightRow = (Int(heightSkill) * countSkillsOneRow) + 65
-      heightCellSkills = CGFloat(resultHeightRow)
+       
+       let widhtScene = self.profileview.tableView.frame.size.width - 48
+       var sumWidhtSkills: CGFloat = 0
+       let heightSkill = CGFloat(68)
+       
+       
+       if isEditingSkills == false {
+           
+           for i in user.skills {
+               sumWidhtSkills += i.width(withConstrainedHeight: heightSkill, font: UIFont(name: "Helvetica", size: 15)!) * 1.2
+           }
+           
+       } else {
+           
+           for i in user.skills {
+               sumWidhtSkills += (i.width(withConstrainedHeight: heightSkill, font: UIFont(name: "Helvetica", size: 15)!) * 1.2) + 10 + 24
+           }
+           
+       }
+       
+       let countRowCollectionCell =  (sumWidhtSkills + (CGFloat(user.skills.count * 72)) + 74) / widhtScene
+       let resultHeightTableRowSkills = (Int(heightSkill) * Int(countRowCollectionCell))
+       
+       if resultHeightTableRowSkills > 100 {
+           heightCellSkills = CGFloat(resultHeightTableRowSkills)
+       } else {
+           heightCellSkills = 100
+       }
+       
     }
     
     func updateSkillsRow() {
@@ -79,6 +109,7 @@ extension MainViewController {
     }
     
     func useEditingSkills(indexCell: IndexPath) {
+        updateHeightSkillsRow()
         profileview.tableView.reloadRows(at: [indexCell], with: .none)
         delegate?.updaateSkills()
     }
@@ -95,8 +126,6 @@ extension MainViewController {
         loadUserData()
         self.profileview.tableView.reloadData()
     }
-    
-    
 }
 
 //MARK: configure controller
@@ -109,7 +138,6 @@ extension MainViewController {
         profileview.tableView.dataSource = self
         updateHeightAboutRow()
         updateHeightSkillsRow()
-        loadUserData()
     }
     
     func loadUserData() {

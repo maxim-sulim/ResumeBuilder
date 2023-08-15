@@ -20,11 +20,11 @@ class SkillsTableViewCell: UITableViewCell, UpdateSkillsColletcionProtocol {
     @IBOutlet weak var colletctionView: UICollectionView!
     
     
-     func updaateSkills() {
+    func updaateSkills() {
         colletctionView.reloadData()
     }
     
-     func deleteSkill(index: Int) {
+    func deleteSkill(index: Int) {
         delegate?.deleteSkill(index: index)
         delegate?.updateSkillsRow()
     }
@@ -50,7 +50,7 @@ class SkillsTableViewCell: UITableViewCell, UpdateSkillsColletcionProtocol {
         colletctionView.collectionViewLayout = configureCollectionLayout()
     }
     
-    func configureCollectionLayout() -> UICollectionViewCompositionalLayout {
+    private func configureCollectionLayout() -> UICollectionViewCompositionalLayout {
         
             let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .estimated(120), heightDimension: .estimated(44)))
             
@@ -71,7 +71,7 @@ class SkillsTableViewCell: UITableViewCell, UpdateSkillsColletcionProtocol {
 extension SkillsTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        let count = (delegate?.user.skills.count ?? -1) + 1
+        let count = (delegate?.user.skills.count ?? 0) + 1
         
        return count
         
@@ -102,9 +102,8 @@ extension SkillsTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
                 guard let newCell = collectionView.dequeueReusableCell(withReuseIdentifier: "EditSkillCollectionCell", for: indexPath) as? EditSkillCollectionCell else {
                     return cell
                 }
-                newCell.titleEditSkillLable.text = delegate?.user.skills[indexPath.row]
                 newCell.delegate = self
-                newCell.configure(index: indexPath.row)
+                newCell.configure(user: delegate!.user, index: indexPath.row)
                 cell = newCell
                 
                 
@@ -113,8 +112,7 @@ extension SkillsTableViewCell: UICollectionViewDelegate, UICollectionViewDataSou
                 guard let newCell = collectionView.dequeueReusableCell(withReuseIdentifier: "SkillCollectionCell", for: indexPath) as? SkillCollectionCell else {
                     return cell
                 }
-                newCell.titleSkillLable.text = delegate?.user.skills[indexPath.row]
-                newCell.configure()
+                newCell.configure(user: delegate!.user, index: indexPath.row)
                 cell = newCell
             }
         }

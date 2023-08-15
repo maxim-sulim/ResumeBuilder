@@ -20,12 +20,15 @@ class EditSkillCollectionCell: UICollectionViewCell {
         delegate?.deleteSkill(index: buttonEdit.tag)
     }
     
-    func configure(index: Int) {
+    func configure(user: Resume, index: Int) {
+        
         backEditSkilllView.layer.backgroundColor = Resources.Color.bacgroundTop.cgColor
         backEditSkilllView.layer.cornerRadius = 12
         titleEditSkillLable.textColor = Resources.Color.text
+        titleEditSkillLable.text = user.skills[index]
         let image = UIImage(named: "deleteImage")
         buttonEdit.setImage(image, for: .normal)
         buttonEdit.tag = index
+        
     }
 }
